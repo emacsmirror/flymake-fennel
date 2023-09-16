@@ -80,8 +80,6 @@ Calls into REPORT-FN with diagnostics from the fennel compiler."
   "Add `fnl-flymake-backend' to `flymake-diagnostic-functions'."
   (add-hook 'flymake-diagnostic-functions 'fnl-flymake-backend nil t))
 
-(add-hook 'fennel-mode-hook 'fnl-setup-flymake-backend)
-
 (provide 'flymake-fennel)
 ;;; flymake-fennel.el ends here
 

@@ -13,21 +13,14 @@ Clone the repo:
 git clone https://git.sr.ht/~mgmarlow/flymake-fennel /path/to/flymake-fennel
 ```
 
-Require `flymake-fennel`:
+Add `flymake-fennel` to your Emacs config:
 
 ```elisp
 (add-to-list 'load-path "/path/to/flymake-fennel")
 (require 'flymake-fennel)
+
+(add-hook 'fennel-mode-hook #'flymake-mode)
+(add-hook 'fennel-mode-hook #'fnl-setup-flymake-backend)
 ```
 
-Optionally, add `flymake-mode` to your `fennel-mode` hooks:
-
-```elisp
-(use-package fennel-mode
-  :ensure t
-  :hook (fennel-mode . flymake-mode))
-```
-
-Note: `flymake-fennel` automatically registers its own Flymake
-backend.
 
