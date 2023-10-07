@@ -80,10 +80,11 @@ Calls into REPORT-FN with diagnostics from the fennel compiler."
       (process-send-region flymake-fennel--flymake-proc (point-min) (point-max))
       (process-send-eof flymake-fennel--flymake-proc))))
 
+;;;###autoload
 (defun flymake-fennel-setup ()
   "Set up Fennel and Flymake."
   (interactive)
-  (add-hook 'flymake-diagnostic-functions 'flymake-fennel-flymake-backend nil t)
+  (add-hook 'flymake-diagnostic-functions #'flymake-fennel-flymake-backend nil t)
   (flymake-mode))
 
 (provide 'flymake-fennel)
