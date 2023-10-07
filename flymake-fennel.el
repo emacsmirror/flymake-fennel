@@ -5,6 +5,8 @@
 ;; Author:  Graham Marlow <info@mgmarlow.com>
 ;; Keywords: tools
 ;; Version: 0.1.0
+;; Package-Requires: ((emacs "26.1"))
+;; Homepage: https://git.sr.ht/~mgmarlow/flymake-fennel
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,14 +24,16 @@
 ;;; Commentary:
 
 ;; A Flymake backend for the Fennel programming language.
+;;
+;; (add-hook 'fennel-mode-hook #'flymake-fennel-setup)
 
 ;;; Code:
 
 (require 'cl-lib)
 
-(defvar-local fnl--flymake-proc nil)
+(defvar-local flymake-fennel--flymake-proc nil)
 
-(defun fnl--make-diagnostics (source)
+(defun flymake-fennel--make-diagnostics (source)
   "Build diagnostics for SOURCE from `current-buffer'."
   (cl-loop
    while (search-forward-regexp
@@ -43,42 +47,44 @@
    when (and beg end)
    collect (flymake-make-diagnostic source beg end :error msg)))
 
-(defun fnl-flymake-backend (report-fn &rest _args)
+(defun flymake-fennel-flymake-backend (report-fn &rest _args)
   "Flymake backend function.
 
 Calls into REPORT-FN with diagnostics from the fennel compiler."
   (unless (executable-find "fennel")
     (error "Cannot find fennel binary"))
 
-  (when (process-live-p fnl--flymake-proc)
-    (kill-process fnl--flymake-proc))
+  (when (process-live-p flymake-fennel--flymake-proc)
+    (kill-process flymake-fennel--flymake-proc))
 
   (let ((source (current-buffer)))
     (save-restriction
       (widen)
-      (setq fnl--flymake-proc
+      (setq flymake-fennel--flymake-proc
             (make-process
              :name "fennel-flymake"
              :noquery t
              :connection-type 'pipe
-             :buffer (generate-new-buffer " *fnl-flymake*")
+             :buffer (generate-new-buffer " *flymake-fennel*")
              :command (list "fennel" "--compile" (buffer-file-name (current-buffer)))
              :sentinel
              (lambda (proc _event)
                (when (memq (process-status proc) '(exit signal))
                  (unwind-protect
-                     (if (with-current-buffer source (eq proc fnl--flymake-proc))
+                     (if (with-current-buffer source (eq proc flymake-fennel--flymake-proc))
                          (with-current-buffer (process-buffer proc)
                            (goto-char (point-min))
-                           (funcall report-fn (fnl--make-diagnostics source)))
+                           (funcall report-fn (flymake-fennel--make-diagnostics source)))
                        (flymake-log :warning "Canceling obsolete check %s" proc))
                    (kill-buffer (process-buffer proc)))))))
-      (process-send-region fnl--flymake-proc (point-min) (point-max))
-      (process-send-eof fnl--flymake-proc))))
+      (process-send-region flymake-fennel--flymake-proc (point-min) (point-max))
+      (process-send-eof flymake-fennel--flymake-proc))))
 
-(defun fnl-setup-flymake-backend ()
-  "Add `fnl-flymake-backend' to `flymake-diagnostic-functions'."
-  (add-hook 'flymake-diagnostic-functions 'fnl-flymake-backend nil t))
+(defun flymake-fennel-setup ()
+  "Set up Fennel and Flymake."
+  (interactive)
+  (add-hook 'flymake-diagnostic-functions 'flymake-fennel-flymake-backend nil t)
+  (flymake-mode))
 
 (provide 'flymake-fennel)
 ;;; flymake-fennel.el ends here

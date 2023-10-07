@@ -19,8 +19,7 @@ Add `flymake-fennel` to your Emacs config:
 (add-to-list 'load-path "/path/to/flymake-fennel")
 (require 'flymake-fennel)
 
-(add-hook 'fennel-mode-hook #'flymake-mode)
-(add-hook 'fennel-mode-hook #'fnl-setup-flymake-backend)
+(add-hook 'fennel-mode-hook #'flymake-fennel-setup)
 ```
 
 
