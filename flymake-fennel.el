@@ -4,7 +4,7 @@
 
 ;; Author:  Graham Marlow <info@mgmarlow.com>
 ;; Keywords: tools
-;; Version: 0.1.0
+;; Version: 1.0.0
 ;; Package-Requires: ((emacs "26.1"))
 ;; Homepage: https://git.sr.ht/~mgmarlow/flymake-fennel
 
