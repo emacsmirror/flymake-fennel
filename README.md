@@ -1,21 +1,18 @@
 # flymake-fennel
 
+[![MELPA](https://melpa.org/packages/flymake-fennel-badge.svg)](https://melpa.org/#/flymake-fennel)
+
 Flymake backend for [Fennel](https://fennel-lang.org).
 
 ## Installation
 
-Make sure you have
-[fennel-mode](https://git.sr.ht/~technomancy/fennel-mode) installed.
+You probably want to install
+[fennel-mode](https://git.sr.ht/~technomancy/fennel-mode) first.
 
-Install from VC:
+Install `flymake-fennel` from
+[MELPA](https://melpa.org/#/getting-started):
 
 ```
-M-x package-vc-install RET https://git.sr.ht/~mgmarlow/flymake-fennel
+(use-package flymake-fennel
+  :hook (fennel-mode . flymake-fennel-setup-backend))
 ```
-
-Add `flymake-fennel` to your Emacs config:
-
-```elisp
-(add-hook 'fennel-mode-hook #'flymake-fennel-setup)
-```
-
