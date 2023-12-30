@@ -12,7 +12,7 @@ You probably want to install
 Install `flymake-fennel` from
 [MELPA](https://melpa.org/#/getting-started):
 
-```
+```elisp
 (use-package flymake-fennel
   :hook (fennel-mode . flymake-fennel-setup-backend))
 ```
